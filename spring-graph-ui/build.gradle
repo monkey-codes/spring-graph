@@ -6,13 +6,13 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.moowork.gradle:gradle-gulp-plugin:0.12'
+    classpath 'com.moowork.gradle:gradle-grunt-plugin:0.12'
     classpath "com.moowork.gradle:gradle-node-plugin:0.12"
   }
 }
 
-apply plugin: 'com.moowork.gulp'
-processResources.dependsOn gulp_default
+apply plugin: 'com.moowork.grunt'
+processResources.dependsOn grunt_build
 //jar.dependsOn gulp_default
 //build.dependsOn gulp_default
 
