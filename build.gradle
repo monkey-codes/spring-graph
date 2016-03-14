@@ -1,0 +1,73 @@
+
+
+allprojects {
+    apply plugin: 'groovy'
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configure(allprojects) { project ->
+    group = 'codes.monkey'
+
+    ext.springVersion = '4.2.5.RELEASE'
+    ext.spockVersion = '1.0-groovy-2.4'
+}
+
+
+allprojects {
+  task hello << { task -> println "I'm $task.project.name" }
+}
+
+subprojects {
+    dependencies {
+        compile 'org.codehaus.groovy:groovy-all:2.4.5'
+        compile("org.springframework:spring-core:$springVersion")
+        compile("org.springframework:spring-beans:$springVersion")
+        compile("org.springframework:spring-context:$springVersion")
+        testCompile "org.spockframework:spock-core:$spockVersion"
+        testCompile "org.spockframework:spock-spring:$spockVersion"
+        testCompile 'junit:junit:4.12'
+        testCompile "org.springframework:spring-test:$springVersion"
+
+    }
+}
+
+project("spring-graph-core") {
+
+}
+project("spring-graph-web") {
+    dependencies {
+        compile project(':spring-graph-core')
+        compile("org.springframework:spring-webmvc:$springVersion")
+        compile("org.springframework:spring-web:$springVersion")
+    }
+}
+
+//project("spring-graph-ui") {
+//    buildscript {
+//        repositories {
+//            maven {
+//                url "https://plugins.gradle.org/m2/"
+//            }
+//        }
+//
+//        dependencies {
+//            classpath 'com.moowork.gradle:gradle-gulp-plugin:0.12'
+//        }
+//    }
+//
+//    apply plugin: 'com.moowork.gulp'
+////    sourceSets {
+////        main {
+////            resources {
+////                srcDir 'src'
+////            }
+////        }
+////    }
+//}

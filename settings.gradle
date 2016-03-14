@@ -1,0 +1,6 @@
+rootProject.name = 'spring-graph'
+
+include 'spring-graph-core'
+include 'spring-graph-web'
+include 'spring-graph-test'
+include 'spring-graph-ui'
