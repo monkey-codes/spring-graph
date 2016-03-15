@@ -89,6 +89,7 @@ module.exports = function (grunt) {
                 '/app/styles',
                 connect.static('./app/styles')
               ),
+              connect().use('/api',connect.static('./mockapi')),
               connect.static(appConfig.app)
             ];
           }

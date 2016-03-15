@@ -49,6 +49,15 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
         str
     }
 
+    Map toVisMap(List<Closure> filters) {
+
+        def targets = filters.inject(registry){p, current -> p.findAll(current)}.values()
+        [
+                nodes: targets.collect{[id: it.name, label: it.dotName]},
+                edges: targets.collect{Node node -> node.dependsOn.collect{[from:node.dotName, to: it.dotName]}}.flatten()
+        ]
+    }
+
     def buildGraph() {
         def nodeRegistry = [:]
         def register

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
+import static codes.monkey.springgraph.GraphBuilder.FILTER_CONNECTED_ONLY
+
 /**
  * Created by jzietsman on 3/10/16.
  */
@@ -23,7 +25,7 @@ class SpringGraphController {
 
     @RequestMapping(path = '/graph', produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody byte[] graph(){
-        builder.graphVizGraph('png', [GraphBuilder.FILTER_CONNECTED_ONLY])
+        builder.graphVizGraph('png', [FILTER_CONNECTED_ONLY])
     }
 
     @RequestMapping(path = '/api/test')
@@ -32,4 +34,9 @@ class SpringGraphController {
         [hello:'world']
     }
 
+    @RequestMapping(path = '/api/vis')
+    @ResponseBody
+    Map vis(){
+        builder.toVisMap([FILTER_CONNECTED_ONLY])
+    }
 }

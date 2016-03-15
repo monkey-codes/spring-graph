@@ -41,6 +41,17 @@ class GraphBuilderSpec extends Specification {
 
     }
 
+    def "it should create vis json map"(){
+        when:
+        def result = graphBuilder.toVisMap([GraphBuilder.FILTER_CONNECTED_ONLY])
+
+        then:
+        result.nodes.size > 0
+        result.edges.size > 0
+
+    }
+
+
     @Configuration
     public static class TestConfig {
 
