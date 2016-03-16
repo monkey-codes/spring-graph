@@ -2,6 +2,7 @@
 
 allprojects {
     apply plugin: 'groovy'
+    apply plugin: 'maven'
     repositories {
         jcenter()
         mavenCentral()
@@ -44,6 +45,7 @@ project("spring-graph-core") {
 project("spring-graph-web") {
     dependencies {
         compile project(':spring-graph-core')
+        compile project(':spring-graph-ui')
         compile("org.springframework:spring-webmvc:$springVersion")
         compile("org.springframework:spring-web:$springVersion")
     }

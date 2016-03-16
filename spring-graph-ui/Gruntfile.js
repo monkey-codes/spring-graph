@@ -30,6 +30,11 @@ module.exports = function (grunt) {
 
     // Project settings
     yeoman: appConfig,
+    uglify: {
+      options: {
+        compress: false
+      }
+    },
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
@@ -60,7 +65,7 @@ module.exports = function (grunt) {
           livereload: '<%= connect.options.livereload %>'
         },
         files: [
-          '<%= yeoman.app %>/{,*/}*.html',
+          '<%= yeoman.app %>/{,*/}{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]

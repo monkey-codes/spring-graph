@@ -1,16 +1,1 @@
-{
-  "nodes": [
-    {"id": "1", "label": "Node 1"},
-    {"id": "2", "label": "Node 2"},
-    {"id": "3", "label": "Node 3"},
-    {"id": "4", "label": "Node 4"},
-    {"id": "5", "label": "Node 5"}
-
-  ],
-  "edges": [
-    {"from": "1", "to": "3"},
-    {"from": "1", "to": "2"},
-    {"from": "2", "to": "4"},
-    {"from": "2", "to": "5"}
-  ]
-}
+{"nodes":[{"id":9,"label":"springGraphController"},{"id":10,"label":"graphBuilder"},{"id":22,"label":"DispatcherServletAutoConfiguration_DispatcherServletConfiguration"},{"id":25,"label":"CONFIGURATION_PROPERTIES"},{"id":26,"label":"ConfigurationPropertiesBindingPostProcessor"},{"id":27,"label":"store"},{"id":32,"label":"ErrorMvcAutoConfiguration"},{"id":33,"label":"errorAttributes"},{"id":34,"label":"basicErrorController"},{"id":37,"label":"WebMvcAutoConfiguration_EnableWebMvcConfiguration"},{"id":55,"label":"WebMvcAutoConfiguration_WebMvcAutoConfigurationAdapter_FaviconConfiguration"},{"id":58,"label":"WebMvcAutoConfiguration_WebMvcAutoConfigurationAdapter"},{"id":62,"label":"CONFIGURATION_PROPERTIES"},{"id":67,"label":"mbeanExporter"},{"id":68,"label":"objectNamingStrategy"},{"id":71,"label":"JacksonAutoConfiguration_JacksonObjectMapperBuilderConfiguration"},{"id":72,"label":"jacksonObjectMapperBuilder"},{"id":73,"label":"CONFIGURATION_PROPERTIES"},{"id":75,"label":"jacksonObjectMapper"},{"id":77,"label":"HttpMessageConvertersAutoConfiguration_StringHttpMessageConverterConfiguration"},{"id":78,"label":"stringHttpMessageConverter"},{"id":79,"label":"CONFIGURATION_PROPERTIES"},{"id":81,"label":"mappingJackson2HttpMessageConverter"},{"id":83,"label":"HttpMessageConvertersAutoConfiguration"},{"id":84,"label":"messageConverters"},{"id":85,"label":"GroovyTemplateAutoConfiguration_GroovyWebConfiguration"},{"id":87,"label":"GroovyTemplateAutoConfiguration_GroovyMarkupConfiguration"},{"id":90,"label":"CONFIGURATION_PROPERTIES"},{"id":91,"label":"HttpEncodingAutoConfiguration"},{"id":93,"label":"MultipartAutoConfiguration"},{"id":94,"label":"multipartConfigElement"},{"id":96,"label":"CONFIGURATION_PROPERTIES"},{"id":98,"label":"serverProperties"}],"edges":[{"from":9,"to":10,"arrows":"to"},{"from":22,"to":98,"arrows":"to"},{"from":22,"to":25,"arrows":"to"},{"from":22,"to":94,"arrows":"to"},{"from":26,"to":27,"arrows":"to"},{"from":32,"to":98,"arrows":"to"},{"from":34,"to":33,"arrows":"to"},{"from":37,"to":58,"arrows":"to"},{"from":37,"to":25,"arrows":"to"},{"from":55,"to":62,"arrows":"to"},{"from":58,"to":62,"arrows":"to"},{"from":58,"to":25,"arrows":"to"},{"from":58,"to":84,"arrows":"to"},{"from":67,"to":68,"arrows":"to"},{"from":71,"to":73,"arrows":"to"},{"from":75,"to":72,"arrows":"to"},{"from":77,"to":79,"arrows":"to"},{"from":81,"to":75,"arrows":"to"},{"from":83,"to":78,"arrows":"to"},{"from":83,"to":81,"arrows":"to"},{"from":85,"to":90,"arrows":"to"},{"from":87,"to":90,"arrows":"to"},{"from":91,"to":79,"arrows":"to"},{"from":93,"to":96,"arrows":"to"}]}

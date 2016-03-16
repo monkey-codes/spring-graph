@@ -53,14 +53,15 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
 
         def targets = filters.inject(registry){p, current -> p.findAll(current)}.values()
         [
-                nodes: targets.collect{[id: it.name, label: it.dotName]},
-                edges: targets.collect{Node node -> node.dependsOn.collect{[from:node.dotName, to: it.dotName]}}.flatten()
+                nodes: targets.collect{[id: it.id, label: it.dotName]},
+                edges: targets.collect{Node node -> node.dependsOn.collect{[from:node.id, to: it.id, arrows:'to']}}.flatten()
         ]
     }
 
     def buildGraph() {
         def nodeRegistry = [:]
         def register
+        def id = 0
         register = { name ->
             if (nodeRegistry.containsKey(name)) return nodeRegistry[name]
             if (!listableBeanFactory.containsBeanDefinition(name)) {
@@ -69,6 +70,7 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
             }
             BeanDefinition beanDefinition = listableBeanFactory.getBeanDefinition(name)
             Node node = new Node(
+                    id: id++,
                     name: name,
                     clazz: beanDefinition.beanClassName,
                     beanDefinition: beanDefinition
@@ -106,13 +108,14 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
     }
 
     static class Node {
+        int id
         String name, clazz, loadedFrom
         List<Node> dependsOn, dependantNodes = []
         BeanDefinition beanDefinition
 
 
         String getDotName() {
-            name.replaceAll('.*\\.', '').replace('$','_')
+            name.replaceAll('.*\\.', '').replaceAll('[^\\w]+', '_' )
         }
 
         @Override
@@ -120,4 +123,5 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
             name
         }
     }
+
 }

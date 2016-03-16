@@ -13,7 +13,7 @@ import static codes.monkey.springgraph.GraphBuilder.FILTER_CONNECTED_ONLY
  * Created by jzietsman on 3/10/16.
  */
 @Controller
-@RequestMapping(['/spring-graph','/spring-graph-ui'])
+@RequestMapping(['/spring-graph', '/spring-graph-ui'])
 class SpringGraphController {
 
     GraphBuilder builder
@@ -24,19 +24,20 @@ class SpringGraphController {
     }
 
     @RequestMapping(path = '/graph', produces = MediaType.IMAGE_PNG_VALUE)
-    @ResponseBody byte[] graph(){
+    @ResponseBody
+    byte[] graph() {
         builder.graphVizGraph('png', [FILTER_CONNECTED_ONLY])
     }
 
     @RequestMapping(path = '/api/test')
     @ResponseBody
-    Map api(){
-        [hello:'world']
+    Map api() {
+        [hello: 'world']
     }
 
     @RequestMapping(path = '/api/vis')
     @ResponseBody
-    Map vis(){
+    Map vis() {
         builder.toVisMap([FILTER_CONNECTED_ONLY])
     }
 }
