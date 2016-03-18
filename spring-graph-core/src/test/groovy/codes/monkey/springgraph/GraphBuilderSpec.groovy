@@ -4,18 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.ContextHierarchy
 import spock.lang.Specification
 
 /**
  * Created by jzietsman on 3/10/16.
  */
-@ContextConfiguration(classes = GraphBuilderSpec.TestConfig.class)
+@ContextHierarchy([
+        @ContextConfiguration(classes = GraphBuilderSpec.TestParentConfig.class),
+        @ContextConfiguration(classes = GraphBuilderSpec.TestChildConfig.class)
+])
+
 class GraphBuilderSpec extends Specification {
 
     @Autowired
     GraphBuilder graphBuilder
 
-    def "it should provide a byte[] of the graph in given format"(){
+    def "it should provide a byte[] of the graph in given format"() {
         expect:
         graphBuilder.graphVizGraph('png').size() > 0
     }
@@ -25,23 +30,24 @@ class GraphBuilderSpec extends Specification {
         !graphBuilder.registry.isEmpty()
     }
 
-    def "it should spit out the graph in DOT format"(){
+    def "it should spit out the graph in DOT format"() {
         expect:
         graphBuilder.toDOTString() != null
 
     }
 
-    def "it should provide only connected filter"(){
+    def "it should provide only connected filter"() {
         when:
         def result = graphBuilder.toDOTString([GraphBuilder.FILTER_CONNECTED_ONLY])
 
         then:
         result.contains('beanThree')
+        result.contains('ctx1_beanOne -> {ctx1_beanTwo ctx0_parentBeanTwo}')
         !result.contains('beanFour')
 
     }
 
-    def "it should create vis json map"(){
+    def "it should create vis json map"() {
         when:
         def result = graphBuilder.toVisMap([GraphBuilder.FILTER_CONNECTED_ONLY])
 
@@ -51,9 +57,25 @@ class GraphBuilderSpec extends Specification {
 
     }
 
+    @Configuration
+    public static class TestParentConfig {
+
+
+        @Bean
+        public ParentBeanOne parentBeanOne() {
+            new ParentBeanOne()
+        }
+
+        @Bean
+        public ParentBeanTwo parentBeanTwo(ParentBeanOne parentBeanOne) {
+            new ParentBeanTwo(parentBeanOne: parentBeanOne)
+        }
+
+    }
+
 
     @Configuration
-    public static class TestConfig {
+    public static class TestChildConfig {
 
         /**
          * A static @Bean method can be called by the container without requiring
@@ -69,42 +91,49 @@ class GraphBuilderSpec extends Specification {
         }
 
         @Bean
-        BeanThree beanThree() {
+        public BeanThree beanThree() {
             new BeanThree()
         }
 
         @Bean
-        BeanTwo beanTwo(BeanThree beanThree) {
+        public BeanTwo beanTwo(BeanThree beanThree) {
             new BeanTwo(beanThree: beanThree)
         }
 
         @Bean
-        BeanOne beanOne(BeanTwo beanTwo) {
-            new BeanOne(beanTwo: beanTwo)
+        public BeanOne beanOne(BeanTwo beanTwo, ParentBeanTwo parentBeanTwo) {
+            new BeanOne(beanTwo: beanTwo,
+            parentBeanTwo: parentBeanTwo)
         }
 
         @Bean
-        BeanFour beanFour() {
+        public  BeanFour beanFour() {
             new BeanFour()
         }
     }
 
     static class BeanOne {
         BeanTwo beanTwo
-
+        ParentBeanTwo parentBeanTwo
     }
 
     static class BeanTwo {
         BeanThree beanThree
-
     }
 
     static class BeanThree {
-
     }
 
     static class BeanFour {
 
+    }
+
+    static class ParentBeanOne {
+
+    }
+
+    static class ParentBeanTwo {
+        ParentBeanOne parentBeanOne
     }
 
 

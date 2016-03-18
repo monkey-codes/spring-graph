@@ -41,18 +41,17 @@ angular.module('springGraphUiApp')
     },
     "edges": {
       "shadow": true,
-      "smooth": {
-        "forceDirection": "none"
-      }
     },
     "nodes": {
       "shadow": true
     },
+
     "physics": {
       "barnesHut": {
         "springLength": 610,
-        "springConstant": 0.085,
-        "avoidOverlap": 0.53
+        gravitationalConstant: -2000,
+        //"springConstant": 0.085,
+        "avoidOverlap": 1
       },
       "minVelocity": 0.75,
       "timestep": 0.8
