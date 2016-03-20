@@ -1,13 +1,17 @@
 package codes.monkey.springgraph.web
 
+import codes.monkey.springgraph.Formats
 import codes.monkey.springgraph.GraphBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
-import static codes.monkey.springgraph.GraphBuilder.FILTER_CONNECTED_ONLY
+import static codes.monkey.springgraph.Filters.FILTER_CONNECTED_ONLY
+import static codes.monkey.springgraph.Formats.PNG
+import static codes.monkey.springgraph.Formats.SVG
 
 /**
  * Created by jzietsman on 3/10/16.
@@ -23,21 +27,24 @@ class SpringGraphController {
         this.builder = builder
     }
 
-    @RequestMapping(path = '/graph', produces = MediaType.IMAGE_PNG_VALUE)
+    @RequestMapping(path = '/image/png', produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
-    byte[] graph() {
-        builder.graphVizGraph('png', [FILTER_CONNECTED_ONLY])
+    byte[] png() {
+        builder.format(PNG, [FILTER_CONNECTED_ONLY])
     }
 
-    @RequestMapping(path = '/api/test')
+    @RequestMapping(path = '/image/svg', produces = 'image/svg+xml')
     @ResponseBody
-    Map api() {
-        [hello: 'world']
+    byte[] svg() {
+        builder.format(SVG, [FILTER_CONNECTED_ONLY])
     }
 
-    @RequestMapping(path = '/api/vis')
+
+    @RequestMapping(path = '/api/{format}')
     @ResponseBody
-    Map vis() {
-        builder.toVisMap([FILTER_CONNECTED_ONLY])
+    <T> T api(@PathVariable String format) {
+        def fmt = Formats[format.toUpperCase()]
+        builder.format(fmt, [FILTER_CONNECTED_ONLY])
     }
+
 }

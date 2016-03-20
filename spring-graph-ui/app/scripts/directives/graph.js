@@ -5,7 +5,7 @@ angular.module('springGraphUiApp')
 .directive('graph', function GraphDirective($http, GraphOptionFactory) {
   return {
     link:function(scope,element){
-      $http.get('api/vis.json').then(function(response){
+      $http.get('api/visjs').then(function(response){
         var container = element.find('#graph').get(0);
         function shapeTypes(node){
           node.shape = 'box';
@@ -27,34 +27,37 @@ angular.module('springGraphUiApp')
 })
 .factory('GraphOptionFactory', function GraphOptionFactory(){
   var options = {
-    "configure": {
-      "enabled": false,
-      "filter": [
-        "nodes",
-        "edges",
-        "layout",
-        "interaction",
-        "manipulation",
-        "physics",
-        "global"
+    configure: {
+      enabled: false,
+      filter: [
+        'nodes',
+        'edges',
+        'layout',
+        'interaction',
+        'manipulation',
+        'physics',
+        'global'
       ]
     },
-    "edges": {
-      "shadow": true,
+    edges: {
+      shadow: true,
     },
-    "nodes": {
-      "shadow": true
+    nodes: {
+      shadow: true
     },
 
-    "physics": {
-      "barnesHut": {
-        "springLength": 610,
-        gravitationalConstant: -2000,
-        //"springConstant": 0.085,
-        "avoidOverlap": 1
+    physics: {
+      stabilization:{
+        enabled: true
       },
-      "minVelocity": 0.75,
-      "timestep": 0.8
+      barnesHut: {
+        springLength: 610,
+        gravitationalConstant: -2000,
+        //springConstant: 0.085,
+        avoidOverlap: 1
+      },
+      minVelocity: 0.75,
+      timestep: 0.8
     }
   };
   return {

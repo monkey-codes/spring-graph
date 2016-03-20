@@ -2,7 +2,6 @@ package codes.monkey.springgraph
 
 import org.springframework.beans.BeansException
 import org.springframework.beans.factory.config.BeanDefinition
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -10,14 +9,12 @@ import org.springframework.context.ApplicationContextAware
 /**
  * Created by jzietsman on 3/10/16.
  */
-class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor {
+class GraphBuilder implements ApplicationContextAware {
 
     @Lazy
-    Map registry = { buildGraph() }()
+    Map registry = { buildGraph().asImmutable() }()
 
     List<ApplicationContext> applicationContexts = []
-    ApplicationContext applicationContext
-//    ConfigurableListableBeanFactory listableBeanFactory
 
     @Override
     void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -29,49 +26,14 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
         }
         runUp(applicationContext)
         this.applicationContexts = this.applicationContexts.reverse()
-
-//        this.applicationContext.getAutowireCapableBeanFactory()
-        this.applicationContext = applicationContext
     }
 
-    @Override
-    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-//        this.listableBeanFactory = beanFactory
-    }
 
-    static FILTER_CONNECTED_ONLY = { String key, Node value ->
-        value.dependsOn.size() > 0 || value.dependantNodes.size() > 0
-    }
-
-    String toDOTString() {
-        toDOTString([])
-    }
-
-    String toDOTString(List<Closure> filters) {
-        def targets = filters.inject(registry) { p, current -> p.findAll(current) }
-        def gnodes = targets.values().findAll { it }.collect { node ->
-            "${node.dotName} -> {${node.dependsOn.collect { it?.dotName }.join(' ')}};"
-
-        }
-        def str = """|digraph {
-           |rankdir=LR;
-           |${gnodes.join('\n')}
-           |}""".stripMargin()
-        str
-    }
-
-    Map toVisMap(List<Closure> filters) {
-
+    public <T> T format(Format<T> format, List<Closure> filters){
         def targets = filters.inject(registry) { p, current -> p.findAll(current) }.values()
-        [
-                nodes: targets.collect { [id: it.id, label: it.dotName] },
-                edges: targets.collect { Node node ->
-                    node.dependsOn.collect {
-                        [from: node.id, to: it.id, arrows: 'to']
-                    }
-                }.flatten()
-        ]
+        format.apply(targets as List<Node>)
     }
+
 
     def buildGraph() {
         def nodeRegistry = [:]
@@ -113,50 +75,6 @@ class GraphBuilder implements ApplicationContextAware, BeanFactoryPostProcessor 
             }
         }
         nodeRegistry
-    }
-
-    byte[] graphVizGraph(String format) {
-        graphVizGraph(format, [])
-    }
-
-    byte[] graphVizGraph(String format, List<Closure> filters) {
-
-        def graphBytes = null
-        File.createTempFile('graphviz', '.dot').with {
-            write toDOTString(filters)
-            def output = "$parent/${name[0..-5]}-graph.$format"
-            println absolutePath
-            println output
-            def command = "dot -T$format $absolutePath -o $output"
-            command.execute().waitForOrKill(10000)
-            new File(output).with {
-                graphBytes = bytes
-                delete()
-            }
-            delete()
-        }
-        graphBytes
-    }
-
-    static class Node {
-        int id, ctxPosition
-        String name, clazz, loadedFrom, ctxName
-        List<Node> dependsOn, dependantNodes = []
-        BeanDefinition beanDefinition
-
-
-        String getDotName() {
-            "ctx${ctxPosition}_${sanitize(name)}"
-        }
-
-        private String sanitize(String s) {
-            s.replaceAll('.*\\.', '').replaceAll('[^\\w]+', '_')
-        }
-
-        @Override
-        public String toString() {
-            name
-        }
     }
 
 }

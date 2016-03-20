@@ -7,6 +7,10 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.ContextHierarchy
 import spock.lang.Specification
 
+import static codes.monkey.springgraph.Filters.FILTER_CONNECTED_ONLY
+import static codes.monkey.springgraph.Filters.NOOP
+import static codes.monkey.springgraph.Formats.*
+
 /**
  * Created by jzietsman on 3/10/16.
  */
@@ -22,7 +26,7 @@ class GraphBuilderSpec extends Specification {
 
     def "it should provide a byte[] of the graph in given format"() {
         expect:
-        graphBuilder.graphVizGraph('png').size() > 0
+        graphBuilder.format(PNG, [NOOP]).size() > 0
     }
 
     def "it should build the graph"() {
@@ -32,13 +36,13 @@ class GraphBuilderSpec extends Specification {
 
     def "it should spit out the graph in DOT format"() {
         expect:
-        graphBuilder.toDOTString() != null
+        graphBuilder.format(DOT,[NOOP]) != null
 
     }
 
     def "it should provide only connected filter"() {
         when:
-        def result = graphBuilder.toDOTString([GraphBuilder.FILTER_CONNECTED_ONLY])
+        def result = graphBuilder.format(DOT, [FILTER_CONNECTED_ONLY])
 
         then:
         result.contains('beanThree')
@@ -49,7 +53,7 @@ class GraphBuilderSpec extends Specification {
 
     def "it should create vis json map"() {
         when:
-        def result = graphBuilder.toVisMap([GraphBuilder.FILTER_CONNECTED_ONLY])
+        def result = graphBuilder.format(VISJS, [FILTER_CONNECTED_ONLY])
 
         then:
         result.nodes.size > 0
