@@ -16,8 +16,6 @@ class ImageFormat implements Format<byte[]> {
         File.createTempFile('graphviz', '.dot').with {
             write dotFormat.apply(targets)
             def output = "$parent/${name[0..-5]}-graph.$imageFormat"
-            println absolutePath
-            println output
             def command = "dot -T$imageFormat $absolutePath -o $output"
             command.execute().waitForOrKill(10000)
             new File(output).with {

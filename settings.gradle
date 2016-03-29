@@ -1,4 +1,4 @@
-rootProject.name = 'spring-graph'
+rootProject.name = 'spring-graph-parent'
 
 include 'spring-graph-core'
 include 'spring-graph-web'

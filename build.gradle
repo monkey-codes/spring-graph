@@ -14,7 +14,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 configure(allprojects) { project ->
-    group = 'codes.monkey'
+    group = 'codes.monkey.springgraph'
 
     ext.springVersion = '4.2.5.RELEASE'
     ext.spockVersion = '1.0-groovy-2.4'
